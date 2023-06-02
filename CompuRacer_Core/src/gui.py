@@ -320,7 +320,7 @@ class MainGUI(QMainWindow):
         return None
 
     def remove_request(self, request_id) -> None:
-        self.racer.comm_requests_remove(self.racer, request_id, None, False)
+        self.racer.comm_curr_remove(self.racer, request_id, None)
 
         self.update_json()
 
@@ -526,7 +526,6 @@ class BatchWindow(QMainWindow):
     def load_requests(self) -> None:
         items = self.load_json("state/batches/" + self.batch_name + ".json")["items"]
         requests = self.load_json("state/state.json")["requests"]
-        remove_button = QPushButton("Remove", self)
 
         self.table_widget.setRowCount(len(items))
 
@@ -536,22 +535,27 @@ class BatchWindow(QMainWindow):
             num_parallel = item["value"][0]
             num_sequential = item["value"][1]
 
-            request = requests[request_id]
+            # Controleer of request_id aanwezig is in de requests dictionary
+            if request_id in requests:
+                request = requests[request_id]
 
-            method = request["method"]
-            url = request["url"]
-            host = request["headers"]["Host"]
+                method = request["method"]
+                url = request["url"]
+                host = request["headers"]["Host"]
 
-            self.table_widget.setItem(i, 0, QTableWidgetItem(request_id))
-            self.table_widget.setItem(i, 1, QTableWidgetItem(method))
-            self.table_widget.setItem(i, 2, QTableWidgetItem(url))
-            self.table_widget.setItem(i, 3, QTableWidgetItem(host))
-            self.table_widget.setItem(i, 4, QTableWidgetItem(str(delay_time)))
-            self.table_widget.setItem(i, 5, QTableWidgetItem(str(num_parallel)))
-            self.table_widget.setItem(i, 6, QTableWidgetItem(str(num_sequential)))
-            self.table_widget.setCellWidget(i, 7, remove_button)
+                self.table_widget.setItem(i, 0, QTableWidgetItem(request_id))
+                self.table_widget.setItem(i, 1, QTableWidgetItem(method))
+                self.table_widget.setItem(i, 2, QTableWidgetItem(url))
+                self.table_widget.setItem(i, 3, QTableWidgetItem(host))
+                self.table_widget.setItem(i, 4, QTableWidgetItem(str(delay_time)))
+                self.table_widget.setItem(i, 5, QTableWidgetItem(str(num_parallel)))
+                self.table_widget.setItem(i, 6, QTableWidgetItem(str(num_sequential)))
 
-            remove_button.clicked.connect(lambda _, request_id=str(request_id): self.remove_request(request_id))
+                remove_button = QPushButton("Remove", self)
+                remove_button.clicked.connect(lambda _, request_id=request_id: self.remove_request(request_id))
+                self.table_widget.setCellWidget(i, 7, remove_button)
+            else:
+                print(f"Request with ID {request_id} does not exist in the requests dictionary.")
 
     def send_batch(self) -> None:
         self.save_data()

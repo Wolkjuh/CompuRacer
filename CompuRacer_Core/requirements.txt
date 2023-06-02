@@ -23,7 +23,8 @@ beautifulsoup4
 
 #---- Right dependencies ----#
 certifi==2019.11.28
-requests==2.25.1
+requests==2.25
+charset_normalizer
 jinja2
 markupsafe
 setuptools

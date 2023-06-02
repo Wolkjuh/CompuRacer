@@ -1891,19 +1891,9 @@ class CompuRacer:
                                  utils.QType.ERROR)
             return -1
         if self.cli_check:
-            if request_id is None:
-                # remove all items from the batch
-                question = "Are you sure you want to remove all requests from the current batch?"
-            elif wait_time is None:
-                # remove all items with a certain ID from the batch
-                question = f"Are you sure you want to remove all requests with id '{request_id}' from the current batch?"
-            else:
-                # remove a specific item with a certain ID and wait_time from the batch
-                question = f"Are you sure you want to remove the request with id '{request_id}' and wait_time '{wait_time}' from the current batch?"
-            if self.command_processor.accept_yes_no(question, utils.QType.WARNING):
-                num_removed = curr_batch.remove(request_id, wait_time)
-                self.print_formatted(f"All matching requests are removed from the current batch.\nNumber: {num_removed}",
-                                     utils.QType.INFORMATION)
+            num_removed = curr_batch.remove(request_id, wait_time)
+            self.print_formatted(f"All matching requests are removed from the current batch.\nNumber: {num_removed}",
+                                    utils.QType.INFORMATION)
         num_removed = curr_batch.remove(request_id, wait_time)
         self.print_formatted(f"All matching requests are removed from the current batch.\nNumber: {num_removed}",
                              utils.QType.INFORMATION)
