@@ -14,7 +14,6 @@ ratelimiter
 #---- For batch_sender_async.py ----#
 aiodns
 urllib3
-uvloop
 aiohttp==3.7.4
 aiohttp_socks
 async_timeout==3.0.1

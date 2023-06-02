@@ -22,7 +22,6 @@ from async_timeout import timeout as async_timeout
 
 import src.aiohttp as aiohttp
 import chardet
-import uvloop
 from src.aiohttp import ClientSession
 from aiohttp_socks import SocksConnector
 
@@ -31,7 +30,6 @@ from tqdm import tqdm
 
 from .batch import Batch
 
-uvloop.install()
 progress_bar_width = 100
 
 
